@@ -1,8 +1,6 @@
 from django.urls import path
 from .views import WalletView, OperationView
 
-app_name = "wallets"
-
 
 urlpatterns = [
     path(

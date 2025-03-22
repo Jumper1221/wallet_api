@@ -5,7 +5,7 @@ db.sqlite3
 *.pyc
 __pycache__/
 .DS_Store
-pg_data
+pg_data/
 
 
 venv/

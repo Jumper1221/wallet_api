@@ -1,14 +1,20 @@
 from email.policy import default
 import uuid
 from django.db import models
+from decimal import Decimal
 
 # Create your models here.
 
 
 class Wallet(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    balance = models.DecimalField(max_digits=16, decimal_places=2, default=0)
+    balance = models.DecimalField(
+        max_digits=16, decimal_places=2, default=Decimal("0.00")
+    )
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.id)
 
 
 class Operation(models.Model):
