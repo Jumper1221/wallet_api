@@ -9,8 +9,6 @@ from rest_framework.test import APITestCase
 
 from .models import Wallet
 
-# Create your tests here.
-
 
 class WalletModelTests(TestCase):
     def test_default_balance(self):
@@ -23,7 +21,7 @@ class WalletOperationsTest(APITestCase):
         self.wallet = Wallet.objects.create(balance=1000)
         self.valid_deposit = {"operation_type": "DEPOSIT", "amount": 500}
         self.valid_withdraw = {"operation_type": "WITHDRAW", "amount": 300}
-        self.invalid_payload = {"operation_type": "INVALID", "amount": -100}
+        self.invalid_payload = {"operation_type": "INVALID", "amount": 100}
 
     def test_wallet_creation(self):
         self.assertEqual(self.wallet.balance, Decimal("1000.00"))
@@ -73,11 +71,11 @@ class WalletConcurrencyTests(TransactionTestCase):
         def make_deposit():
             from django.db import connection
 
-            connection.close()
             with transaction.atomic():
                 wallet = Wallet.objects.select_for_update().get(id=self.wallet.id)
                 wallet.balance += Decimal("100")
                 wallet.save()
+            connection.close()
 
         for _ in range(num_requests):
             thread = threading.Thread(target=make_deposit)
@@ -101,12 +99,12 @@ class WalletConcurrencyTests(TransactionTestCase):
         def make_withdrawal():
             from django.db import connection
 
-            connection.close()
             with transaction.atomic():
                 wallet = Wallet.objects.select_for_update().get(id=self.wallet.id)
                 if wallet.balance >= Decimal("100"):
                     wallet.balance -= Decimal("100")
                     wallet.save()
+            connection.close()
 
         for _ in range(num_requests):
             thread = threading.Thread(target=make_withdrawal)

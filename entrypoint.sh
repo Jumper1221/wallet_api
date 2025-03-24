@@ -13,4 +13,5 @@ echo "PostgreSQL is ready!"
 python manage.py migrate
 python manage.py collectstatic --noinput
 
+
 exec "$@"

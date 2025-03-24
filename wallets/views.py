@@ -4,7 +4,7 @@ from django.core.serializers import serialize
 from django.forms import ValidationError
 from rest_framework import views, status
 from rest_framework.response import Response
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.db import transaction
 
@@ -19,7 +19,7 @@ def index(request):
 
 class WalletView(views.APIView):
     def get(self, request, wallet_uuid):
-        wallet = Wallet.objects.get(id=wallet_uuid)
+        wallet = get_object_or_404(Wallet, id=wallet_uuid)
         serializer = WalletSerialiser(wallet)
         return Response(serializer.data)
 
