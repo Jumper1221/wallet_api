@@ -44,7 +44,7 @@ docker-compose up --build
 
 API: http://localhost:8000
 
-PGAdmin: http://localhost:8080
+PGAdmin: http://localhost:5050
 
 PostgreSQL: порт 5432
 
